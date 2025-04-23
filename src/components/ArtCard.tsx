@@ -11,6 +11,7 @@ interface ArtCardProps {
   color?: string;
   index?: number;
   image?: string;
+  onImageLoad?: () => void;
 }
 
 const ArtCard = ({ 
@@ -19,7 +20,8 @@ const ArtCard = ({
   year, 
   color, 
   index = 0,
-  image
+  image,
+  onImageLoad
 }: ArtCardProps) => {
   // Colores en base a las pinturas subidas
   const cardColors = [
@@ -55,6 +57,7 @@ const ArtCard = ({
           alt={title}
           className="absolute inset-0 w-full h-full object-cover opacity-80 mix-blend-multiply"
           style={{ filter: 'contrast(1.2) saturate(1.1)' }}
+          onLoad={onImageLoad}
         />
         
         {/* Efecto de textura y ruido */}

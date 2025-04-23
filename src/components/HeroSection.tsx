@@ -1,24 +1,39 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import clownImage from '../assets/img/clown.jpg';
 
 interface HeroSectionProps {
   title: string;
   subtitle: string;
   highlightedText?: string;
+  onNavigateToGallery?: () => void;
+  onNavigateToContact?: () => void;
 }
 
 const HeroSection = ({ 
   title = "Arte que desafía los límites", 
   subtitle = "Explorando lo grotesco y bello a través del expresionismo figurativo contemporáneo.",
-  highlightedText = "desafía" 
+  highlightedText = "desafía",
+  onNavigateToGallery,
+  onNavigateToContact
 }: HeroSectionProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  
+  // Efecto para animar la entrada de los elementos
+  useEffect(() => {
+    // Pequeño delay para asegurar que la animación se ejecute después de renderizar
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
   
   // Replace the highlighted text with a span that has text-blood-red class
   const formattedTitle = title.replace(highlightedText, `<span class="text-blood-red">${highlightedText}</span>`);
   
   return (
-    <section className="hero-section bg-shadow-black py-16 md:py-24 relative">
+    <section className="hero-section bg-shadow-black py-16 md:py-24 relative overflow-hidden">
       {/* Overlay de imagen con efecto */}
       <div className="absolute inset-0 overflow-hidden opacity-30 mix-blend-overlay">
         <img 
@@ -36,7 +51,9 @@ const HeroSection = ({
       
       <div className="container-custom relative z-10">
         <div className="flex flex-col md:flex-row items-center">
-          <div className="md:w-1/2 mb-8 md:mb-0">
+          <div 
+            className={`md:w-1/2 mb-8 md:mb-0 transform transition-all duration-1000 ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}
+          >
             <h1 
               className="text-flesh mb-6 font-display leading-tight hand-drawn"
               dangerouslySetInnerHTML={{ __html: formattedTitle }}
@@ -45,11 +62,23 @@ const HeroSection = ({
               {subtitle}
             </p>
             <div className="flex flex-wrap gap-4">
-              <button className="btn-primary">Explorar Galería</button>
-              <button className="btn-secondary">Contactar</button>
+              <button 
+                className="btn-primary hover:scale-105 hover:shadow-lg transition-all duration-300"
+                onClick={onNavigateToGallery}
+              >
+                Explorar Galería
+              </button>
+              <button 
+                className="btn-secondary hover:bg-toxic-orange/20 transition-colors duration-300"
+                onClick={onNavigateToContact}
+              >
+                Contactar
+              </button>
             </div>
           </div>
-          <div className="md:w-1/2">
+          <div 
+            className={`md:w-1/2 transform transition-all duration-1000 ${isVisible ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'}`}
+          >
             <div className="relative">
               {/* Placeholder para artwork con estilo de las pinturas */}
               <div className="distorted-image brushed-border aspect-square max-w-md mx-auto bg-toxic-orange rounded-none overflow-hidden shadow-brutal transform rotate-1 hover:rotate-0 transition-transform duration-500">

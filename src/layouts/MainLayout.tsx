@@ -1,6 +1,7 @@
 import { useState, ReactNode } from 'react'
+import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 
-type PageType = 'home' | 'gallery' | 'contact';
+type PageType = 'home' | 'gallery' | 'contact' | 'about';
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -8,14 +9,14 @@ interface MainLayoutProps {
   currentPage: PageType;
 }
 
-const MainLayout = ({ children, onNavigate, currentPage }: MainLayoutProps) => {
+const MainLayout = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
-  // Handler para enlaces de navegación
-  const handleNavigation = (page: PageType) => (e: React.MouseEvent) => {
-    e.preventDefault();
-    onNavigate(page);
-    setMenuOpen(false); // Cerrar menú móvil al navegar
+  // Cerrar menú al navegar
+  const handleNavigation = (path: string) => () => {
+    navigate(path);
+    setMenuOpen(false);
   };
 
   return (
@@ -49,39 +50,44 @@ const MainLayout = ({ children, onNavigate, currentPage }: MainLayoutProps) => {
           {/* Desktop navigation */}
           <ul className="hidden md:flex space-x-8 text-lg">
             <li>
-              <a 
-                href="#" 
-                onClick={handleNavigation('home')} 
-                className={`text-flesh hover:text-toxic-orange ${currentPage === 'home' ? 'text-toxic-orange' : ''}`}
+              <NavLink 
+                to="/" 
+                onClick={handleNavigation('/')} 
+                className={({isActive}) => 
+                  `text-flesh hover:text-toxic-orange ${isActive ? 'text-toxic-orange' : ''}`}
               >
                 Inicio
-              </a>
+              </NavLink>
             </li>
             <li>
-              <a 
-                href="#" 
-                onClick={handleNavigation('gallery')} 
-                className={`text-flesh hover:text-toxic-orange ${currentPage === 'gallery' ? 'text-toxic-orange' : ''}`}
+              <NavLink 
+                to="/gallery" 
+                onClick={handleNavigation('/gallery')} 
+                className={({isActive}) => 
+                  `text-flesh hover:text-toxic-orange ${isActive ? 'text-toxic-orange' : ''}`}
               >
                 Galería
-              </a>
+              </NavLink>
             </li>
             <li>
-              <a 
-                href="#" 
-                className="text-flesh hover:text-toxic-orange"
+              <NavLink 
+                to="/about" 
+                onClick={handleNavigation('/about')} 
+                className={({isActive}) => 
+                  `text-flesh hover:text-toxic-orange ${isActive ? 'text-toxic-orange' : ''}`}
               >
                 Sobre el Artista
-              </a>
+              </NavLink>
             </li>
             <li>
-              <a 
-                href="#" 
-                onClick={handleNavigation('contact')} 
-                className={`text-flesh hover:text-toxic-orange ${currentPage === 'contact' ? 'text-toxic-orange' : ''}`}
+              <NavLink 
+                to="/contact" 
+                onClick={handleNavigation('/contact')} 
+                className={({isActive}) => 
+                  `text-flesh hover:text-toxic-orange ${isActive ? 'text-toxic-orange' : ''}`}
               >
                 Contacto
-              </a>
+              </NavLink>
             </li>
           </ul>
         </div>
@@ -92,39 +98,44 @@ const MainLayout = ({ children, onNavigate, currentPage }: MainLayoutProps) => {
             <div className="absolute inset-0 bg-texture-noise opacity-20 mix-blend-overlay pointer-events-none"></div>
             <ul className="flex flex-col space-y-4 p-4">
               <li>
-                <a 
-                  href="#" 
-                  onClick={handleNavigation('home')} 
-                  className={`text-flesh hover:text-toxic-orange block py-2 ${currentPage === 'home' ? 'text-toxic-orange' : ''}`}
+                <NavLink 
+                  to="/" 
+                  onClick={handleNavigation('/')} 
+                  className={({isActive}) => 
+                    `text-flesh hover:text-toxic-orange block py-2 ${isActive ? 'text-toxic-orange' : ''}`}
                 >
                   Inicio
-                </a>
+                </NavLink>
               </li>
               <li>
-                <a 
-                  href="#" 
-                  onClick={handleNavigation('gallery')} 
-                  className={`text-flesh hover:text-toxic-orange block py-2 ${currentPage === 'gallery' ? 'text-toxic-orange' : ''}`}
+                <NavLink 
+                  to="/gallery" 
+                  onClick={handleNavigation('/gallery')} 
+                  className={({isActive}) => 
+                    `text-flesh hover:text-toxic-orange block py-2 ${isActive ? 'text-toxic-orange' : ''}`}
                 >
                   Galería
-                </a>
+                </NavLink>
               </li>
               <li>
-                <a 
-                  href="#" 
-                  className="text-flesh hover:text-toxic-orange block py-2"
+                <NavLink 
+                  to="/about" 
+                  onClick={handleNavigation('/about')} 
+                  className={({isActive}) => 
+                    `text-flesh hover:text-toxic-orange block py-2 ${isActive ? 'text-toxic-orange' : ''}`}
                 >
                   Sobre el Artista
-                </a>
+                </NavLink>
               </li>
               <li>
-                <a 
-                  href="#" 
-                  onClick={handleNavigation('contact')} 
-                  className={`text-flesh hover:text-toxic-orange block py-2 ${currentPage === 'contact' ? 'text-toxic-orange' : ''}`}
+                <NavLink 
+                  to="/contact" 
+                  onClick={handleNavigation('/contact')} 
+                  className={({isActive}) => 
+                    `text-flesh hover:text-toxic-orange block py-2 ${isActive ? 'text-toxic-orange' : ''}`}
                 >
                   Contacto
-                </a>
+                </NavLink>
               </li>
             </ul>
           </div>
@@ -143,7 +154,7 @@ const MainLayout = ({ children, onNavigate, currentPage }: MainLayoutProps) => {
       
       {/* Main Content */}
       <main className="flex-grow">
-        {children}
+        <Outlet />
       </main>
       
       {/* Footer */}
@@ -155,10 +166,14 @@ const MainLayout = ({ children, onNavigate, currentPage }: MainLayoutProps) => {
             <div>
               <h3 className="text-toxic-orange font-display text-xl mb-4 hand-drawn">Navegación</h3>
               <ul className="space-y-2">
-                <li><a href="#" onClick={handleNavigation('home')} className="text-gray-blue hover:text-toxic-orange">Inicio</a></li>
-                <li><a href="#" onClick={handleNavigation('gallery')} className="text-gray-blue hover:text-toxic-orange">Galería</a></li>
-                <li><a href="#" className="text-gray-blue hover:text-toxic-orange">Sobre el Artista</a></li>
-                <li><a href="#" onClick={handleNavigation('contact')} className="text-gray-blue hover:text-toxic-orange">Contacto</a></li>
+                <li><NavLink to="/" className={({isActive}) => 
+                  `text-gray-blue hover:text-toxic-orange ${isActive ? 'text-toxic-orange' : ''}`}>Inicio</NavLink></li>
+                <li><NavLink to="/gallery" className={({isActive}) => 
+                  `text-gray-blue hover:text-toxic-orange ${isActive ? 'text-toxic-orange' : ''}`}>Galería</NavLink></li>
+                <li><NavLink to="/about" className={({isActive}) => 
+                  `text-gray-blue hover:text-toxic-orange ${isActive ? 'text-toxic-orange' : ''}`}>Sobre el Artista</NavLink></li>
+                <li><NavLink to="/contact" className={({isActive}) => 
+                  `text-gray-blue hover:text-toxic-orange ${isActive ? 'text-toxic-orange' : ''}`}>Contacto</NavLink></li>
               </ul>
             </div>
             

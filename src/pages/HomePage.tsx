@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import HeroSection from '../components/HeroSection';
 import ArtCard from '../components/ArtCard';
 import wowImg from '../assets/img/wow.jpg';
@@ -5,8 +6,9 @@ import elfenliedImg from '../assets/img/elfenlied.jpg';
 import dragImg from '../assets/img/drag.jpg';
 import mouseImg from '../assets/img/mouse.jpg';
 import shotImg from '../assets/img/shot.jpg';
+import { artworks } from '../data/artworks';
 
-// Datos de ejemplo para la sección de obras destacadas
+// Datos de ejemplo para la sección de obras destacadas con IDs que coinciden con los de artworks.ts
 const featuredArtworks = [
   {
     id: 1,
@@ -31,20 +33,78 @@ const featuredArtworks = [
   }
 ];
 
-const HomePage = () => {
+// Props de la página para recibir la función de navegación
+interface HomePageProps {
+  onNavigate?: (page: 'home' | 'gallery' | 'contact') => void;
+}
+
+const HomePage = ({ onNavigate }: HomePageProps) => {
+  // Efecto para animación al cargar la página
+  useEffect(() => {
+    // Animación de entrada para las tarjetas de obras
+    const artCards = document.querySelectorAll('.art-card');
+    artCards.forEach((card, index) => {
+      setTimeout(() => {
+        card.classList.add('animate-in');
+      }, 300 + (index * 150));
+    });
+
+    // Animación para secciones
+    const sections = document.querySelectorAll('section');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-fade-in');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    sections.forEach(section => {
+      section.classList.add('opacity-0');
+      observer.observe(section);
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  // Handler para botones de navegación
+  const handleNavigate = (page: 'home' | 'gallery' | 'contact') => () => {
+    if (onNavigate) {
+      onNavigate(page);
+      // Scroll al inicio para mejor experiencia
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  // Handler para navegar a la galería y mostrar una obra específica
+  const handleViewArtworkDetail = (artworkId: number) => () => {
+    // Aquí navegamos a la galería
+    if (onNavigate) {
+      // Almacenar el ID de la obra seleccionada en sessionStorage para recuperarlo en la galería
+      sessionStorage.setItem('selectedArtworkId', artworkId.toString());
+      onNavigate('gallery');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   return (
     <>
       <HeroSection 
         title="Arte que desgarra los límites"
         subtitle="Explorando lo grotesco y revelando la crudeza a través del expresionismo figurativo contemporáneo. Un viaje visual por las entrañas de la condición humana."
         highlightedText="desgarra"
+        onNavigateToGallery={handleNavigate('gallery')}
+        onNavigateToContact={handleNavigate('contact')}
       />
       
       {/* Separador gráfico */}
       <div className="h-1 w-full bg-gradient-to-r from-shadow-black via-blood-red to-shadow-black"></div>
       
       {/* Sección de "Destacado" */}
-      <section className="py-16 bg-shadow-black relative">
+      <section className="py-16 bg-shadow-black relative transition-opacity duration-700">
         <div className="absolute inset-0 bg-texture-noise opacity-30 mix-blend-overlay"></div>
         
         <div className="container-custom relative z-10">
@@ -56,19 +116,29 @@ const HomePage = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredArtworks.map((artwork, index) => (
-              <ArtCard
-                key={artwork.id}
-                title={artwork.title}
-                technique={artwork.technique}
-                year={artwork.year}
-                index={index}
-                image={artwork.image}
-              />
+              <div 
+                key={artwork.id} 
+                className="cursor-pointer transform transition-transform hover:scale-[1.02]"
+                onClick={handleViewArtworkDetail(artwork.id)}
+              >
+                <ArtCard
+                  title={artwork.title}
+                  technique={artwork.technique}
+                  year={artwork.year}
+                  index={index}
+                  image={artwork.image}
+                />
+              </div>
             ))}
           </div>
           
           <div className="mt-12 text-center">
-            <button className="btn-primary">Ver toda la galería</button>
+            <button 
+              className="btn-primary hover:scale-105 transition-transform duration-300"
+              onClick={handleNavigate('gallery')}
+            >
+              Ver toda la galería
+            </button>
           </div>
         </div>
       </section>
@@ -81,7 +151,7 @@ const HomePage = () => {
       </div>
       
       {/* Sección "Sobre el Artista" */}
-      <section className="py-16 bg-night-blue text-flesh relative">
+      <section className="py-16 bg-night-blue text-flesh relative transition-opacity duration-700">
         <div className="absolute inset-0 bg-gradient-to-b from-night-blue/80 to-shadow-black/90"></div>
         <div className="texture-overlay"></div>
         <div className="mesh-overlay opacity-10"></div>
@@ -90,7 +160,7 @@ const HomePage = () => {
           <div className="flex flex-col md:flex-row items-center gap-12">
             <div className="md:w-1/3">
               {/* Placeholder para foto del artista, usando una imagen real */}
-              <div className="distorted-image aspect-square bg-shadow-black rounded-none border-2 border-blood-red/50 max-w-xs mx-auto relative overflow-hidden">
+              <div className="distorted-image aspect-square bg-shadow-black rounded-none border-2 border-blood-red/50 max-w-xs mx-auto relative overflow-hidden hover:scale-[1.02] transition-transform duration-500">
                 <img 
                   src={mouseImg} 
                   alt="El artista BruisedArtrash"
@@ -126,14 +196,19 @@ const HomePage = () => {
                 los límites entre la belleza convencional y la expresión cruda de emociones reprimidas, creando 
                 un lenguaje visual que resulta tan perturbador como hipnótico.
               </p>
-              <button className="btn-primary">Conocer más</button>
+              <button 
+                className="btn-primary hover:translate-y-[-2px] hover:shadow-lg transition-all duration-300"
+                onClick={handleNavigate('contact')}
+              >
+                Conocer más
+              </button>
             </div>
           </div>
         </div>
       </section>
       
       {/* Banner promocional con imagen */}
-      <section className="py-10 bg-shadow-black relative">
+      <section className="py-10 bg-shadow-black relative transition-opacity duration-700">
         <div className="absolute inset-0 opacity-40">
           <img
             src={shotImg}
@@ -150,7 +225,12 @@ const HomePage = () => {
               "El arte debe incomodar al cómodo y reconfortar al incómodo"
             </h3>
             <p className="text-flesh mb-6">― Expuesta en galería Bruised·Mind, Madrid 2023</p>
-            <button className="btn-secondary">Próximas Exposiciones</button>
+            <button 
+              className="btn-secondary hover:animate-pulse hover:bg-toxic-orange/10 transition-colors duration-300"
+              onClick={handleNavigate('contact')}
+            >
+              Próximas Exposiciones
+            </button>
           </div>
         </div>
       </section>

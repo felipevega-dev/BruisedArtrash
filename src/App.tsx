@@ -1,38 +1,24 @@
-import { useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
 import HomePage from './pages/HomePage';
 import GalleryPage from './pages/GalleryPage';
 import ContactPage from './pages/ContactPage';
-
-type PageType = 'home' | 'gallery' | 'contact';
+import AboutPage from './pages/AboutPage';
 
 function App() {
-  const [currentPage, setCurrentPage] = useState<PageType>('home');
-  
-  // Esta función se pasará al layout para cambiar entre páginas
-  const navigateTo = (page: PageType) => {
-    setCurrentPage(page);
-  };
-  
-  // Función para renderizar la página actual
-  const renderCurrentPage = () => {
-    switch (currentPage) {
-      case 'home':
-        return <HomePage />;
-      case 'gallery':
-        return <GalleryPage />;
-      case 'contact':
-        return <ContactPage />;
-      default:
-        return <HomePage />;
-    }
-  };
-  
   return (
-    <MainLayout onNavigate={navigateTo} currentPage={currentPage}>
-      {renderCurrentPage()}
-    </MainLayout>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path="gallery" element={<GalleryPage />} />
+          <Route path="about" element={<AboutPage />} />
+          <Route path="contact" element={<ContactPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
-export default App
+export default App;
