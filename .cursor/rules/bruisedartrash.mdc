@@ -1,0 +1,38 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# rules:
+  - Paleta de colores:
+      # Se extraen los colores predominantes y contrastantes de las pinturas:
+      - Rojo coral intenso (#E7503B)
+      - Verde ácido/oliva (#6E9033)
+      - Verde oscuro casi negro (#26351C)
+      - Azul eléctrico profundo (#22437D)
+      - Azul claro grisáceo (#A3BAC6)
+      - Amarillo ocre/siena (#D1A256)
+      - Beige piel (#F3D1A0)
+      - Marrón tostado (#7C3F18)
+      - Negro profundo (#191414)
+      - Naranja intenso (#F47A28)
+      - Blanco sucio (#F7F5E6)
+  - Estilo visual:
+      - Inspirarse en el expresionismo figurativo y lo grotesco/pop art contemporáneo.
+      - Aplicar un look pictórico: usar fondos de color plano vibrante, elementos con bordes irregulares, manchas, overlays texturizados y transiciones abruptas entre colores.
+      - Contrastes marcados: tipografía y botones deben destacar (textos claros sobre fondos oscuros y viceversa).
+      - Incluir elementos "crudos", como pinceladas digitalizadas, efectos brush, overlays con manchas o sprites inspirados en las texturas de las pinturas.
+      - Usar imágenes grandes y hero sections potentes para destacar obras.
+      - La web debe transmitir emoción, desinhibición, y un aire de extrañeza elegante.
+  - UX/UI:
+      - Layout responsivo, mobile-first, con experiencia fluida en celulares (galerías swipe, menú hamburger, imágenes adaptables).
+      - Tipografía fuerte, legible y con carácter (ej: usar Inter, Oswald, o fuentes similares sans-serif de peso alto).
+      - Galerías con “hover” artístico: resaltar obras con sombra y brillo colorido.
+      - Animaciones sutiles tipo fade-in, parallax, y microtransiciones pictóricas al navegar entre secciones.
+      - Cuidar accesibilidad y legibilidad (buen contraste de color, textos suficientemente grandes).
+  - Stack y experticia:
+      - Ser un experto en Vite, ReactJS y TailwindCSS.
+      - Priorizar desarrollo ágil con hot reload y organización de carpetas escalable.
+      - Utilizar buenas prácticas de estructura de componentes y atomic design.
+      - Sugerir, cuando corresponda, integración futura para multi-idioma, formularios de contacto y lightbox para imágenes.
