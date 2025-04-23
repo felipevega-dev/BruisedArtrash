@@ -1,37 +1,69 @@
 import HeroSection from '../components/HeroSection';
+import ArtCard from '../components/ArtCard';
+import wowImg from '../assets/img/wow.jpg';
+import elfenliedImg from '../assets/img/elfenlied.jpg';
+import dragImg from '../assets/img/drag.jpg';
+import mouseImg from '../assets/img/mouse.jpg';
+import shotImg from '../assets/img/shot.jpg';
+
+// Datos de ejemplo para la sección de obras destacadas
+const featuredArtworks = [
+  {
+    id: 1,
+    title: "La Máscara Despojada",
+    technique: "Óleo sobre lienzo",
+    year: 2023,
+    image: elfenliedImg
+  },
+  {
+    id: 2,
+    title: "Figura en Naranja",
+    technique: "Técnica mixta",
+    year: 2022,
+    image: dragImg
+  },
+  {
+    id: 3,
+    title: "Payaso Trágico",
+    technique: "Acrílico y óleo",
+    year: 2021,
+    image: wowImg
+  }
+];
 
 const HomePage = () => {
   return (
     <>
       <HeroSection 
-        title="Arte que desafía los límites"
-        subtitle="Explorando lo grotesco y bello a través del expresionismo figurativo contemporáneo. Un viaje visual por las entrañas de la condición humana."
-        highlightedText="desafía"
+        title="Arte que desgarra los límites"
+        subtitle="Explorando lo grotesco y revelando la crudeza a través del expresionismo figurativo contemporáneo. Un viaje visual por las entrañas de la condición humana."
+        highlightedText="desgarra"
       />
       
+      {/* Separador gráfico */}
+      <div className="h-1 w-full bg-gradient-to-r from-shadow-black via-blood-red to-shadow-black"></div>
+      
       {/* Sección de "Destacado" */}
-      <section className="py-16 bg-dirty-white">
-        <div className="container-custom">
-          <h2 className="text-deep-black mb-12 text-center">Obra <span className="text-coral">Destacada</span></h2>
+      <section className="py-16 bg-shadow-black relative">
+        <div className="absolute inset-0 bg-texture-noise opacity-30 mix-blend-overlay"></div>
+        
+        <div className="container-custom relative z-10">
+          <h2 className="text-flesh mb-4 text-center">Obra <span className="text-blood-red hand-drawn">Destacada</span></h2>
+          <p className="text-gray-blue text-center max-w-2xl mx-auto mb-12">
+            Exploraciones viscerales que desafían la percepción convencional y revelan 
+            la belleza en la distorsión y el caos.
+          </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Tarjetas de obras - Placeholders */}
-            {[1, 2, 3].map((item) => (
-              <div key={item} className="art-card group">
-                <div className="aspect-square bg-ochre/20 relative overflow-hidden">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-deep-black font-display text-2xl">OBRA {item}</span>
-                  </div>
-                  {/* Overlay al hacer hover */}
-                  <div className="absolute inset-0 bg-coral/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <span className="text-dirty-white font-bold">Ver detalles</span>
-                  </div>
-                </div>
-                <div className="p-4">
-                  <h3 className="font-display text-xl text-deep-black">Título de obra {item}</h3>
-                  <p className="text-deep-black/70 mt-2">Técnica mixta sobre lienzo</p>
-                </div>
-              </div>
+            {featuredArtworks.map((artwork, index) => (
+              <ArtCard
+                key={artwork.id}
+                title={artwork.title}
+                technique={artwork.technique}
+                year={artwork.year}
+                index={index}
+                image={artwork.image}
+              />
             ))}
           </div>
           
@@ -41,32 +73,90 @@ const HomePage = () => {
         </div>
       </section>
       
+      {/* Separador distorsionado */}
+      <div className="h-8 bg-toxic-orange relative overflow-hidden">
+        <svg viewBox="0 0 1200 30" preserveAspectRatio="none" className="w-full h-full absolute top-0 left-0">
+          <path d="M0,0 C300,30 800,0 1200,20 L1200,30 L0,30 Z" fill="#0D0D0D"></path>
+        </svg>
+      </div>
+      
       {/* Sección "Sobre el Artista" */}
-      <section className="py-16 bg-dark-green text-dirty-white relative">
+      <section className="py-16 bg-night-blue text-flesh relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-night-blue/80 to-shadow-black/90"></div>
         <div className="texture-overlay"></div>
+        <div className="mesh-overlay opacity-10"></div>
+        
         <div className="container-custom relative z-10">
           <div className="flex flex-col md:flex-row items-center gap-12">
             <div className="md:w-1/3">
-              {/* Placeholder para foto del artista */}
-              <div className="aspect-square bg-toast-brown/60 rounded-lg max-w-xs mx-auto">
-                <div className="h-full w-full flex items-center justify-center">
-                  <span className="text-dirty-white font-display text-2xl">ARTISTA</span>
+              {/* Placeholder para foto del artista, usando una imagen real */}
+              <div className="distorted-image aspect-square bg-shadow-black rounded-none border-2 border-blood-red/50 max-w-xs mx-auto relative overflow-hidden">
+                <img 
+                  src={mouseImg} 
+                  alt="El artista BruisedArtrash"
+                  className="w-full h-full object-cover opacity-80"
+                  style={{ filter: 'contrast(1.3) saturate(0.9)' }}
+                />
+                <div className="absolute inset-0 bg-night-blue/20 mix-blend-color-burn"></div>
+                
+                {/* Efecto de líneas tipo máscara */}
+                <div className="absolute inset-0 pointer-events-none">
+                  <svg className="w-full h-full" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="20" y1="0" x2="20" y2="100" stroke="#A93226" strokeWidth="0.5" strokeDasharray="1,3"/>
+                    <line x1="40" y1="0" x2="40" y2="100" stroke="#A93226" strokeWidth="0.5" strokeDasharray="1,3"/>
+                    <line x1="60" y1="0" x2="60" y2="100" stroke="#A93226" strokeWidth="0.5" strokeDasharray="1,3"/>
+                    <line x1="80" y1="0" x2="80" y2="100" stroke="#A93226" strokeWidth="0.5" strokeDasharray="1,3"/>
+                  </svg>
                 </div>
               </div>
+              
+              {/* Elementos decorativos similar a las pinturas */}
+              <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-blood-red rounded-full mix-blend-multiply blur-md opacity-50"></div>
             </div>
+            
             <div className="md:w-2/3">
-              <h2 className="mb-6">Sobre <span className="text-coral">BruisedArtrash</span></h2>
+              <h2 className="mb-6 text-flesh">Sobre <span className="text-toxic-orange hand-drawn">BruisedArtrash</span></h2>
               <p className="text-gray-blue text-lg mb-4">
-                Artista plástico cuya obra se sitúa en la intersección entre lo grotesco y lo bello, utilizando técnicas expresionistas para explorar la condición humana a través de figuras distorsionadas y colores intensos.
+                Artista cuya obra emerge desde los márgenes de la conciencia, explorando lo grotesco y lo bello 
+                a través de una visión atormentada. Utilizando técnicas expresionistas para revelar la condición 
+                humana mediante figuras distorsionadas, máscaras y colores abrasivos.
               </p>
               <p className="text-gray-blue text-lg mb-6">
-                Influenciado por Francis Bacon, Lucian Freud y el arte contemporáneo urbano, su trabajo cuestiona los límites entre la belleza convencional y la expresión cruda de emociones.
+                Influenciado por Francis Bacon, Lucian Freud y el teatro de lo grotesco, su trabajo destroza 
+                los límites entre la belleza convencional y la expresión cruda de emociones reprimidas, creando 
+                un lenguaje visual que resulta tan perturbador como hipnótico.
               </p>
               <button className="btn-primary">Conocer más</button>
             </div>
           </div>
         </div>
       </section>
+      
+      {/* Banner promocional con imagen */}
+      <section className="py-10 bg-shadow-black relative">
+        <div className="absolute inset-0 opacity-40">
+          <img
+            src={shotImg}
+            alt="Imagen de fondo"
+            className="w-full h-full object-cover"
+            style={{ filter: 'grayscale(60%) contrast(1.2)' }}
+          />
+          <div className="absolute inset-0 bg-shadow-black/70"></div>
+        </div>
+        
+        <div className="container-custom relative z-10">
+          <div className="max-w-2xl mx-auto text-center">
+            <h3 className="text-toxic-orange text-2xl font-display mb-4 gross-text">
+              "El arte debe incomodar al cómodo y reconfortar al incómodo"
+            </h3>
+            <p className="text-flesh mb-6">― Expuesta en galería Bruised·Mind, Madrid 2023</p>
+            <button className="btn-secondary">Próximas Exposiciones</button>
+          </div>
+        </div>
+      </section>
+      
+      {/* Separador final */}
+      <div className="h-2 bg-gradient-to-r from-blood-red via-toxic-orange to-blood-red"></div>
     </>
   );
 };
